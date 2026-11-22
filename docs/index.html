@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Repo Pulse — Live GitHub Open-Source Readiness Auditor</title>
-  <meta name="description" content="Audit any public GitHub repository's open-source readiness (0-100) and commit pulse right in your browser." />
+  <title>Repo Pulse Suite — Repo Pulse · Dev Recap · Env Guard</title>
+  <meta name="description" content="Audit any public GitHub repository: Open-Source Readiness (Repo Pulse), Git Activity (Dev Recap), and .env & Secret Safety (Env Guard)." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
@@ -30,10 +30,10 @@
       min-height: 100vh;
       line-height: 1.5;
     }
-    .container { max-width: 980px; margin: 0 auto; padding: 28px 20px 64px; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 28px 20px 64px; }
     nav {
       display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 42px; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 36px; flex-wrap: wrap; gap: 12px;
     }
     .brand {
       display: flex; align-items: center; gap: 10px;
@@ -49,20 +49,20 @@
       display: inline-flex; align-items: center; gap: 6px;
       padding: 8px 14px; border-radius: 8px;
       border: 1px solid var(--border); background: var(--surface);
-      color: var(--text); text-decoration: none; font-size: 0.88rem; font-weight: 600;
+      color: var(--text); text-decoration: none; font-size: 0.86rem; font-weight: 600;
       transition: border-color 0.2s, transform 0.15s;
     }
     .btn-ghost:hover { border-color: var(--cyan); transform: translateY(-1px); }
-    .hero { text-align: center; margin-bottom: 32px; }
+    .hero { text-align: center; margin-bottom: 28px; }
     .hero h1 {
-      font-size: clamp(1.9rem, 4vw, 2.75rem); font-weight: 800;
-      letter-spacing: -0.03em; margin-bottom: 12px;
+      font-size: clamp(1.85rem, 4vw, 2.7rem); font-weight: 800;
+      letter-spacing: -0.03em; margin-bottom: 10px;
       background: linear-gradient(135deg, #ffffff 20%, #38bdf8 80%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     }
-    .hero p { color: var(--muted); max-width: 620px; margin: 0 auto 24px; font-size: 1.02rem; }
+    .hero p { color: var(--muted); max-width: 660px; margin: 0 auto 22px; font-size: 1rem; }
     .search-box {
-      display: flex; gap: 10px; max-width: 620px; margin: 0 auto 14px;
+      display: flex; gap: 10px; max-width: 640px; margin: 0 auto 14px;
       background: var(--surface); border: 1px solid var(--border);
       padding: 7px; border-radius: 14px;
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
@@ -70,7 +70,7 @@
     .search-box input {
       flex: 1; background: transparent; border: none; outline: none;
       color: var(--text); font-family: 'JetBrains Mono', monospace;
-      font-size: 0.95rem; padding: 8px 12px;
+      font-size: 0.94rem; padding: 8px 12px;
     }
     .search-box button {
       background: linear-gradient(135deg, #0284c7, #2563eb);
@@ -92,44 +92,81 @@
     }
     .pill:hover { border-color: var(--cyan); }
     .error-banner {
-      display: none; max-width: 680px; margin: 20px auto;
+      display: none; max-width: 700px; margin: 20px auto;
       padding: 14px 18px; border-radius: 12px;
       background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.4);
       color: #fca5a5; text-align: center; font-size: 0.92rem;
     }
-    .results { display: none; margin-top: 32px; animation: fadeIn 0.3s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .score-hero {
-      display: grid; grid-template-columns: auto 1fr; gap: 28px; align-items: center;
+    .results { display: none; margin-top: 28px; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .repo-header {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 18px; padding: 26px; margin-bottom: 20px;
+      border-radius: 16px; padding: 20px 24px; margin-bottom: 18px;
+    }
+    .repo-header h2 { font-size: 1.35rem; font-weight: 800; margin-bottom: 4px; }
+    .repo-header h2 a { color: var(--text); text-decoration: none; }
+    .repo-header h2 a:hover { color: var(--cyan); }
+    .repo-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 8px; }
+    .repo-stats { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.84rem; color: var(--muted); }
+    .repo-stats span strong { color: var(--text); }
+
+    .tabs {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 6px; border-radius: 12px;
+    }
+    .tab-btn {
+      flex: 1; min-width: 150px;
+      background: transparent; border: none; color: var(--muted);
+      padding: 10px 14px; border-radius: 8px;
+      font-weight: 700; font-size: 0.9rem; cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn:hover { color: var(--text); background: var(--surface-2); }
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.18), rgba(37, 99, 235, 0.22));
+      color: var(--cyan); border: 1px solid rgba(56, 189, 248, 0.35);
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeIn 0.2s ease; }
+
+    .score-hero {
+      display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px; margin-bottom: 18px;
     }
     @media (max-width: 640px) { .score-hero { grid-template-columns: 1fr; text-align: center; justify-items: center; } }
-    .ring-wrap { position: relative; width: 132px; height: 132px; }
-    .ring-wrap svg { transform: rotate(-90deg); width: 132px; height: 132px; }
+    .ring-wrap { position: relative; width: 124px; height: 124px; }
+    .ring-wrap svg { transform: rotate(-90deg); width: 124px; height: 124px; }
     .ring-text {
       position: absolute; inset: 0; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
     }
-    .ring-score { font-size: 2rem; font-weight: 800; line-height: 1; }
-    .ring-grade { font-size: 0.82rem; font-weight: 700; color: var(--muted); margin-top: 4px; }
-    .repo-meta h2 { font-size: 1.45rem; font-weight: 800; margin-bottom: 6px; }
-    .repo-meta h2 a { color: var(--text); text-decoration: none; }
-    .repo-meta h2 a:hover { color: var(--cyan); }
-    .repo-desc { color: var(--muted); font-size: 0.94rem; margin-bottom: 14px; }
-    .repo-stats { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.86rem; color: var(--muted); }
-    .repo-stats span strong { color: var(--text); }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-bottom: 20px; }
+    .ring-score { font-size: 1.9rem; font-weight: 800; line-height: 1; }
+    .ring-grade { font-size: 0.8rem; font-weight: 700; color: var(--muted); margin-top: 4px; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; margin-bottom: 18px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 18px; }
+    .kpi {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 16px;
+    }
+    .kpi-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; }
+    .kpi-val { font-size: 1.45rem; font-weight: 800; color: var(--cyan); }
+
     .card {
       background: var(--surface); border: 1px solid var(--border);
-      border-radius: 16px; padding: 20px;
+      border-radius: 16px; padding: 20px; margin-bottom: 18px;
     }
-    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
     .cat-row { margin-bottom: 14px; }
     .cat-row:last-child { margin-bottom: 0; }
     .cat-head { display: flex; justify-content: space-between; font-size: 0.86rem; margin-bottom: 6px; }
     .bar-bg { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
-    .bar-fill { height: 100%; border-radius: 999px; transition: width 0.6s ease; }
+    .bar-fill { height: 100%; border-radius: 999px; transition: width 0.5s ease; }
+
     .check-list { display: flex; flex-direction: column; gap: 10px; }
     .check-item {
       display: flex; align-items: flex-start; gap: 10px;
@@ -141,6 +178,7 @@
     .warn { color: var(--yellow); }
     .fail { color: var(--red); }
     .check-msg { color: var(--muted); font-size: 0.82rem; margin-top: 2px; }
+
     .copy-box {
       display: flex; gap: 10px; align-items: center;
       background: var(--surface-2); border: 1px solid var(--border);
@@ -154,11 +192,24 @@
       padding: 6px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 600; cursor: pointer;
     }
     .btn-copy:hover { border-color: var(--cyan); }
+
     .weekday-bars { display: flex; flex-direction: column; gap: 8px; }
-    .wd-row { display: grid; grid-template-columns: 36px 1fr 28px; align-items: center; gap: 10px; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; }
-    footer {
-      margin-top: 48px; text-align: center; color: var(--muted); font-size: 0.85rem;
+    .wd-row { display: grid; grid-template-columns: 56px 1fr 32px; align-items: center; gap: 10px; font-size: 0.82rem; font-family: 'JetBrains Mono', monospace; }
+    .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .env-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+      padding: 4px 10px; border-radius: 8px;
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text);
     }
+    .env-tag.missing { border-color: rgba(234, 179, 8, 0.5); color: var(--yellow); }
+    .env-tag.ok { border-color: rgba(34, 197, 94, 0.4); color: var(--green); }
+    .commit-row {
+      display: flex; justify-content: space-between; gap: 12px; align-items: center;
+      padding: 8px 10px; border-radius: 8px; background: var(--surface-2); font-size: 0.84rem;
+    }
+    .commit-hash { font-family: 'JetBrains Mono', monospace; color: var(--cyan); font-size: 0.78rem; }
+
+    footer { margin-top: 44px; text-align: center; color: var(--muted); font-size: 0.85rem; }
     footer a { color: var(--cyan); text-decoration: none; }
   </style>
 </head>
@@ -167,26 +218,27 @@
     <nav>
       <a class="brand" href="#">
         <span class="brand-dot"></span>
-        <span>repo-pulse</span>
+        <span>repo-pulse suite</span>
       </a>
       <div class="nav-links">
-        <a class="btn-ghost" href="https://www.npmjs.com/package/repo-pulse-cli" target="_blank" rel="noreferrer">npm: repo-pulse-cli</a>
-        <a class="btn-ghost" href="https://github.com/BatuhanKlcky/repo-pulse" target="_blank" rel="noreferrer">⭐ Star on GitHub</a>
+        <a class="btn-ghost" href="https://github.com/BatuhanKlcky/repo-pulse" target="_blank" rel="noreferrer">⭐ repo-pulse</a>
+        <a class="btn-ghost" href="https://github.com/BatuhanKlcky/dev-recap" target="_blank" rel="noreferrer">📊 dev-recap</a>
+        <a class="btn-ghost" href="https://www.npmjs.com/package/repo-pulse-cli" target="_blank" rel="noreferrer">npm</a>
       </div>
     </nav>
 
     <section class="hero">
-      <h1>Audit Any GitHub Repo in Seconds</h1>
-      <p>Check open-source readiness (0–100 score), spot missing essentials, and inspect recent commit pulse — zero install required.</p>
+      <h1>All-in-One GitHub Repo Inspector</h1>
+      <p>Audit open-source readiness (<strong>Repo Pulse</strong>), inspect Git commit pulse (<strong>Dev Recap</strong>), and check <code>.env</code> &amp; secret hygiene (<strong>Env Guard</strong>) — right in your browser.</p>
       <form class="search-box" id="auditForm">
         <input id="repoInput" type="text" placeholder="owner/repo or https://github.com/owner/repo" value="BatuhanKlcky/repo-pulse" required />
-        <button id="auditBtn" type="submit">Audit Repo</button>
+        <button id="auditBtn" type="submit">Inspect Repo</button>
       </form>
       <div class="examples">
         <span>Try:</span>
         <span class="pill" data-repo="BatuhanKlcky/repo-pulse">BatuhanKlcky/repo-pulse</span>
         <span class="pill" data-repo="BatuhanKlcky/dev-recap">BatuhanKlcky/dev-recap</span>
-        <span class="pill" data-repo="BatuhanKlcky/abandoned-in-space">BatuhanKlcky/abandoned-in-space</span>
+        <span class="pill" data-repo="BatuhanKlcky/rifki-voice-assistant">BatuhanKlcky/rifki-voice-assistant</span>
         <span class="pill" data-repo="vercel/next.js">vercel/next.js</span>
       </div>
     </section>
@@ -194,18 +246,8 @@
     <div class="error-banner" id="errorBanner"></div>
 
     <section class="results" id="results">
-      <div class="score-hero">
-        <div class="ring-wrap">
-          <svg viewBox="0 0 120 120">
-            <circle cx="60" cy="60" r="52" fill="none" stroke="#1e293b" stroke-width="10" />
-            <circle id="scoreRing" cx="60" cy="60" r="52" fill="none" stroke="#22c55e" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" />
-          </svg>
-          <div class="ring-text">
-            <span class="ring-score" id="scoreNum">0</span>
-            <span class="ring-grade" id="gradeLabel">Grade -</span>
-          </div>
-        </div>
-        <div class="repo-meta">
+      <div class="repo-header">
+        <div>
           <h2><a id="repoTitle" href="#" target="_blank" rel="noreferrer">owner/repo</a></h2>
           <p class="repo-desc" id="repoDesc"></p>
           <div class="repo-stats">
@@ -217,37 +259,100 @@
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="card">
-          <h3>Category Breakdown</h3>
-          <div id="categoryBars"></div>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="pulse" type="button">🩺 Repo Pulse (Score)</button>
+        <button class="tab-btn" data-tab="recap" type="button">📊 Dev Recap (Commits)</button>
+        <button class="tab-btn" data-tab="env" type="button">🛡️ Env Guard (Secrets)</button>
+      </div>
+
+      <!-- TAB 1: REPO PULSE -->
+      <div class="tab-panel active" id="panel-pulse">
+        <div class="score-hero">
+          <div class="ring-wrap">
+            <svg viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="52" fill="none" stroke="#1e293b" stroke-width="10" />
+              <circle id="scoreRing" cx="60" cy="60" r="52" fill="none" stroke="#22c55e" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7" />
+            </svg>
+            <div class="ring-text">
+              <span class="ring-score" id="scoreNum">0</span>
+              <span class="ring-grade" id="gradeLabel">Grade -</span>
+            </div>
+          </div>
+          <div id="categoryBars" style="width:100%;"></div>
         </div>
+
         <div class="card">
-          <h3>Recent Commit Pulse (Last 30)</h3>
-          <div class="weekday-bars" id="weekdayBars"></div>
+          <h3>
+            <span>Open-Source Readiness Checklist</span>
+            <span style="font-size:0.8rem; color: var(--muted); font-family: 'JetBrains Mono', monospace;">npx repo-pulse-cli --fix</span>
+          </h3>
+          <div class="check-list" id="checkList"></div>
+        </div>
+
+        <div class="card">
+          <h3>README Score Badge</h3>
+          <div class="copy-box">
+            <code id="badgeCode"></code>
+            <button class="btn-copy" id="copyBadgeBtn" type="button">Copy</button>
+          </div>
         </div>
       </div>
 
-      <div class="card" style="margin-bottom: 20px;">
-        <h3>
-          <span>Audit Checklist</span>
-          <span style="font-size:0.8rem; color: var(--muted); font-family: 'JetBrains Mono', monospace;">npx repo-pulse-cli --fix</span>
-        </h3>
-        <div class="check-list" id="checkList"></div>
+      <!-- TAB 2: DEV RECAP -->
+      <div class="tab-panel" id="panel-recap">
+        <div class="kpi-grid">
+          <div class="kpi"><div class="kpi-label">Commits (Last 30)</div><div class="kpi-val" id="recapCommits">0</div></div>
+          <div class="kpi"><div class="kpi-label">Active Days</div><div class="kpi-val" id="recapDays">0</div></div>
+          <div class="kpi"><div class="kpi-label">Contributors</div><div class="kpi-val" id="recapAuthors">0</div></div>
+          <div class="kpi"><div class="kpi-label">Peak Coding Time</div><div class="kpi-val" id="recapPeak" style="font-size:1.15rem;">-</div></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Activity by Weekday</h3>
+            <div class="weekday-bars" id="weekdayBars"></div>
+          </div>
+          <div class="card">
+            <h3>Conventional Commit Types</h3>
+            <div class="weekday-bars" id="commitTypeBars"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>
+            <span>Recent Commits</span>
+            <span style="font-size:0.8rem; color: var(--muted); font-family: 'JetBrains Mono', monospace;">npx dev-recap</span>
+          </h3>
+          <div class="check-list" id="recentCommitsList"></div>
+        </div>
       </div>
 
-      <div class="card">
-        <h3>README Score Badge</h3>
-        <div class="copy-box">
-          <code id="badgeCode"></code>
-          <button class="btn-copy" id="copyBadgeBtn" type="button">Copy</button>
+      <!-- TAB 3: ENV GUARD -->
+      <div class="tab-panel" id="panel-env">
+        <div class="card">
+          <h3>
+            <span>.env &amp; Secret Hygiene Audit</span>
+            <span style="font-size:0.8rem; color: var(--muted); font-family: 'JetBrains Mono', monospace;">Scanned root &amp; sample source files</span>
+          </h3>
+          <div class="check-list" id="envChecks"></div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>Documented in <code>.env.example</code></h3>
+            <div class="tag-row" id="envExampleKeys"></div>
+          </div>
+          <div class="card">
+            <h3>Detected in Source Code</h3>
+            <div class="tag-row" id="envCodeKeys"></div>
+          </div>
         </div>
       </div>
     </section>
 
     <footer>
       Built by <a href="https://github.com/BatuhanKlcky" target="_blank" rel="noreferrer">Batuhan Kılıçkaya</a> ·
-      Powered by <a href="https://github.com/BatuhanKlcky/repo-pulse" target="_blank" rel="noreferrer">repo-pulse</a> &
+      <a href="https://github.com/BatuhanKlcky/repo-pulse" target="_blank" rel="noreferrer">repo-pulse</a> ·
       <a href="https://github.com/BatuhanKlcky/dev-recap" target="_blank" rel="noreferrer">dev-recap</a>
     </footer>
   </div>
@@ -258,6 +363,15 @@
     const btn = document.getElementById('auditBtn');
     const errorBanner = document.getElementById('errorBanner');
     const results = document.getElementById('results');
+
+    document.querySelectorAll('.tab-btn').forEach(tabBtn => {
+      tabBtn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tabBtn.classList.add('active');
+        document.getElementById(`panel-${tabBtn.dataset.tab}`).classList.add('active');
+      });
+    });
 
     function parseTarget(raw) {
       const s = raw.trim().replace(/\.git$/, '').replace(/\/+$/, '');
@@ -281,6 +395,10 @@
       return 'var(--red)';
     }
 
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m]));
+    }
+
     async function fetchJson(url) {
       const res = await fetch(url);
       if (!res.ok) {
@@ -289,6 +407,23 @@
         throw new Error(msg);
       }
       return res.json();
+    }
+
+    async function fetchRawFile(slug, branch, filePath) {
+      const res = await fetch(`https://raw.githubusercontent.com/${slug}/${branch}/${filePath}`);
+      if (!res.ok) return null;
+      return res.text();
+    }
+
+    function classifyCommit(subject) {
+      const lower = (subject || '').toLowerCase().trim();
+      if (/^feat(\([^)]+\))?!?:/.test(lower)) return 'feat';
+      if (/^fix(\([^)]+\))?!?:/.test(lower)) return 'fix';
+      if (/^docs(\([^)]+\))?!?:/.test(lower)) return 'docs';
+      if (/^refactor(\([^)]+\))?!?:/.test(lower)) return 'refactor';
+      if (/^test(\([^)]+\))?!?:/.test(lower)) return 'test';
+      if (/^(chore|build|ci|style|perf)(\([^)]+\))?!?:/.test(lower)) return 'chore';
+      return 'other';
     }
 
     async function runAudit(rawTarget) {
@@ -301,7 +436,7 @@
 
       errorBanner.style.display = 'none';
       btn.disabled = true;
-      btn.textContent = 'Auditing...';
+      btn.textContent = 'Inspecting...';
 
       try {
         const [repo, rootContents, commits] = await Promise.all([
@@ -310,7 +445,10 @@
           fetchJson(`https://api.github.com/repos/${slug}/commits?per_page=30`).catch(() => []),
         ]);
 
+        const branch = repo.default_branch || 'main';
         const rootNames = new Set(rootContents.map(f => f.name.toLowerCase()));
+        const rootFileMap = new Map(rootContents.map(f => [f.name.toLowerCase(), f.name]));
+
         let githubFiles = [];
         if (rootNames.has('.github')) {
           try {
@@ -325,11 +463,20 @@
           readmeText = atob(readmeData.content.replace(/\n/g, ''));
         } catch {}
 
-        // Evaluate checks (100 pts)
+        // Header
+        const titleEl = document.getElementById('repoTitle');
+        titleEl.textContent = repo.full_name;
+        titleEl.href = repo.html_url;
+        document.getElementById('repoDesc').textContent = repo.description || 'No description provided.';
+        document.getElementById('statStars').textContent = repo.stargazers_count.toLocaleString();
+        document.getElementById('statForks').textContent = repo.forks_count.toLocaleString();
+        document.getElementById('statIssues').textContent = repo.open_issues_count.toLocaleString();
+        document.getElementById('statLang').textContent = repo.language || 'N/A';
+
+        // === 1. REPO PULSE ===
         const checks = [];
         const addCheck = (cat, name, status, pts, max, msg) => checks.push({ cat, name, status, pts, max, msg });
 
-        // Documentation (35)
         if (readmeText.length >= 200) addCheck('Documentation', 'README.md present', 'pass', 15, 15, `Found README (${readmeText.length} chars).`);
         else if (readmeText.length > 0) addCheck('Documentation', 'README.md present', 'warn', 8, 15, 'README is very short.');
         else addCheck('Documentation', 'README.md present', 'fail', 0, 15, 'No README found.');
@@ -340,7 +487,6 @@
         const hasChangelog = rootNames.has('changelog.md') || rootNames.has('releases.md');
         addCheck('Documentation', 'CHANGELOG.md', hasChangelog ? 'pass' : 'warn', hasChangelog ? 5 : 0, 5, hasChangelog ? 'CHANGELOG.md present.' : 'No CHANGELOG.md found.');
 
-        // Community (25)
         const hasLicense = Boolean(repo.license && repo.license.key !== 'other') || rootNames.has('license') || rootNames.has('license.md');
         addCheck('Community', 'Open-source LICENSE', hasLicense ? 'pass' : 'fail', hasLicense ? 10 : 0, 10, hasLicense ? `License: ${repo.license?.spdx_id || 'Present'}` : 'No LICENSE file found.');
 
@@ -353,7 +499,6 @@
         const hasPrTpl = githubFiles.includes('pull_request_template.md') || githubFiles.includes('pull_request_template');
         addCheck('Community', 'Pull Request template', hasPrTpl ? 'pass' : 'fail', hasPrTpl ? 5 : 0, 5, hasPrTpl ? 'PR template configured.' : 'Missing PULL_REQUEST_TEMPLATE.md.');
 
-        // Engineering (25)
         const hasGitignore = rootNames.has('.gitignore');
         addCheck('Engineering', '.gitignore configured', hasGitignore ? 'pass' : 'fail', hasGitignore ? 5 : 0, 5, hasGitignore ? '.gitignore present.' : 'Missing .gitignore.');
 
@@ -363,7 +508,6 @@
         const hasTests = rootNames.has('test') || rootNames.has('tests') || rootNames.has('__tests__') || rootNames.has('spec');
         addCheck('Engineering', 'Tests directory', hasTests ? 'pass' : 'warn', hasTests ? 10 : 0, 10, hasTests ? 'Tests directory detected.' : 'No top-level tests/ directory detected.');
 
-        // Hygiene & Metadata (15)
         const hasEnvLeak = rootNames.has('.env');
         addCheck('Hygiene', 'No exposed .env', hasEnvLeak ? 'fail' : 'pass', hasEnvLeak ? 0 : 5, 5, hasEnvLeak ? '.env committed to root!' : 'No .env file committed.');
 
@@ -375,7 +519,6 @@
         const score = checks.reduce((s, c) => s + c.pts, 0);
         const grade = gradeFromScore(score);
 
-        // Render hero
         const circ = 2 * Math.PI * 52;
         const ring = document.getElementById('scoreRing');
         ring.style.strokeDashoffset = String(circ * (1 - score / 100));
@@ -383,19 +526,8 @@
         document.getElementById('scoreNum').textContent = `${score}`;
         document.getElementById('gradeLabel').textContent = `Grade ${grade}`;
 
-        const titleEl = document.getElementById('repoTitle');
-        titleEl.textContent = repo.full_name;
-        titleEl.href = repo.html_url;
-        document.getElementById('repoDesc').textContent = repo.description || 'No description provided.';
-        document.getElementById('statStars').textContent = repo.stargazers_count.toLocaleString();
-        document.getElementById('statForks').textContent = repo.forks_count.toLocaleString();
-        document.getElementById('statIssues').textContent = repo.open_issues_count.toLocaleString();
-        document.getElementById('statLang').textContent = repo.language || 'N/A';
-
-        // Categories
         const catNames = ['Documentation', 'Community', 'Engineering', 'Hygiene'];
-        const catContainer = document.getElementById('categoryBars');
-        catContainer.innerHTML = catNames.map(name => {
+        document.getElementById('categoryBars').innerHTML = catNames.map(name => {
           const items = checks.filter(c => c.cat === name);
           const pts = items.reduce((s, c) => s + c.pts, 0);
           const max = items.reduce((s, c) => s + c.max, 0);
@@ -407,16 +539,53 @@
             </div>`;
         }).join('');
 
-        // Weekday commit pulse
+        document.getElementById('checkList').innerHTML = checks.map(c => {
+          const icon = c.status === 'pass' ? '✔' : c.status === 'warn' ? '▲' : '✖';
+          return `
+            <div class="check-item">
+              <span class="badge-status ${c.status}">${icon}</span>
+              <div>
+                <div><strong>${escapeHtml(c.name)}</strong> <span style="color:var(--muted)">(${c.pts}/${c.max})</span></div>
+                <div class="check-msg">${escapeHtml(c.msg)}</div>
+              </div>
+            </div>`;
+        }).join('');
+
+        const badgeColor = score >= 85 ? 'brightgreen' : score >= 70 ? 'blue' : 'orange';
+        document.getElementById('badgeCode').textContent =
+          `![Repo Pulse](https://img.shields.io/badge/repo--pulse-${score}%2F100%20(${grade})-${badgeColor})`;
+
+        // === 2. DEV RECAP ===
         const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         const dayMap = Object.fromEntries(days.map(d => [d, 0]));
         const jsDayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const hourMap = new Array(24).fill(0);
+        const daySet = new Set();
+        const authorSet = new Set();
+        const typeMap = { feat: 0, fix: 0, docs: 0, refactor: 0, test: 0, chore: 0, other: 0 };
+
         for (const c of commits) {
           const dt = new Date(c.commit?.author?.date || c.commit?.committer?.date);
           if (!Number.isNaN(dt.getTime())) {
             dayMap[jsDayNames[dt.getDay()]]++;
+            hourMap[dt.getHours()]++;
+            daySet.add(dt.toISOString().slice(0, 10));
           }
+          authorSet.add(c.commit?.author?.name || 'Unknown');
+          const msg = (c.commit?.message || '').split('\n')[0];
+          typeMap[classifyCommit(msg)]++;
         }
+
+        let peakDay = 'Mon', peakDayVal = -1;
+        for (const d of days) { if (dayMap[d] > peakDayVal) { peakDayVal = dayMap[d]; peakDay = d; } }
+        let peakHour = 0, peakHourVal = -1;
+        for (let h = 0; h < 24; h++) { if (hourMap[h] > peakHourVal) { peakHourVal = hourMap[h]; peakHour = h; } }
+
+        document.getElementById('recapCommits').textContent = String(commits.length);
+        document.getElementById('recapDays').textContent = String(daySet.size);
+        document.getElementById('recapAuthors').textContent = String(authorSet.size);
+        document.getElementById('recapPeak').textContent = commits.length ? `${peakDay} @ ${String(peakHour).padStart(2,'0')}:00` : '-';
+
         const maxDay = Math.max(1, ...Object.values(dayMap));
         document.getElementById('weekdayBars').innerHTML = days.map(d => {
           const count = dayMap[d];
@@ -429,33 +598,126 @@
             </div>`;
         }).join('');
 
-        // Checklist
-        document.getElementById('checkList').innerHTML = checks.map(c => {
+        const typeColors = { feat: 'var(--green)', fix: 'var(--red)', docs: '#60a5fa', refactor: 'var(--purple)', test: 'var(--cyan)', chore: 'var(--yellow)', other: 'var(--muted)' };
+        const maxType = Math.max(1, ...Object.values(typeMap));
+        document.getElementById('commitTypeBars').innerHTML = Object.entries(typeMap).map(([t, count]) => {
+          const pct = Math.round((count / maxType) * 100);
+          return `
+            <div class="wd-row">
+              <span>${t}</span>
+              <div class="bar-bg"><div class="bar-fill" style="width:${pct}%; background:${typeColors[t]};"></div></div>
+              <span style="text-align:right; color:var(--muted);">${count}</span>
+            </div>`;
+        }).join('');
+
+        document.getElementById('recentCommitsList').innerHTML = commits.slice(0, 8).map(c => {
+          const sha = (c.sha || '').slice(0, 7);
+          const msg = (c.commit?.message || '').split('\n')[0];
+          const author = c.commit?.author?.name || '';
+          return `
+            <div class="commit-row">
+              <div><span class="commit-hash">${escapeHtml(sha)}</span> ${escapeHtml(msg)}</div>
+              <span style="color:var(--muted); font-size:0.78rem; white-space:nowrap;">${escapeHtml(author)}</span>
+            </div>`;
+        }).join('') || '<div class="check-msg">No commits found.</div>';
+
+        // === 3. ENV GUARD ===
+        const [gitignoreTxt, envExampleTxt] = await Promise.all([
+          hasGitignore ? fetchRawFile(slug, branch, '.gitignore') : Promise.resolve(null),
+          rootNames.has('.env.example') ? fetchRawFile(slug, branch, rootFileMap.get('.env.example')) :
+          rootNames.has('.env.template') ? fetchRawFile(slug, branch, rootFileMap.get('.env.template')) : Promise.resolve(null),
+        ]);
+
+        const envIgnored = gitignoreTxt ? /^\s*\.env(\s|$|\*)/m.test(gitignoreTxt) : false;
+        const exampleKeys = new Set();
+        if (envExampleTxt) {
+          for (const line of envExampleTxt.split(/\r?\n/)) {
+            const m = line.match(/^\s*([A-Z][A-Z0-9_]{1,})\s*=/);
+            if (m) exampleKeys.add(m[1]);
+          }
+        }
+
+        // Scan up to 8 root/src code files for env references & hardcoded secret patterns
+        const codeCandidates = rootContents
+          .filter(f => f.type === 'file' && /\.(js|ts|mjs|py|go|rb|php)$/i.test(f.name))
+          .slice(0, 8);
+        const codeKeySet = new Set();
+        const secretFindings = [];
+        const secretPatterns = [
+          { label: 'GitHub Token', re: /gh[pousr]_[A-Za-z0-9_]{20,}/ },
+          { label: 'OpenAI/Stripe Key', re: /sk-[A-Za-z0-9]{20,}/ },
+          { label: 'Google API Key', re: /AIza[0-9A-Za-z\-_]{20,}/ },
+          { label: 'AWS Access Key', re: /AKIA[0-9A-Z]{16}/ },
+        ];
+
+        await Promise.all(codeCandidates.map(async f => {
+          const txt = await fetchRawFile(slug, branch, f.name);
+          if (!txt) return;
+          for (const m of txt.matchAll(/process\.env\.([A-Z][A-Z0-9_]+)|os\.getenv\(\s*['"]([A-Z][A-Z0-9_]+)['"]|import\.meta\.env\.([A-Z][A-Z0-9_]+)/g)) {
+            const key = m[1] || m[2] || m[3];
+            if (key) codeKeySet.add(key);
+          }
+          for (const sp of secretPatterns) {
+            if (sp.re.test(txt)) secretFindings.push(`${sp.label} pattern in ${f.name}`);
+          }
+        }));
+
+        const missingInExample = [...codeKeySet].filter(k => !exampleKeys.has(k));
+        const envChecks = [
+          {
+            name: 'Committed .env check',
+            status: hasEnvLeak ? 'fail' : 'pass',
+            msg: hasEnvLeak ? '.env file is committed in repository root!' : 'No .env file committed in root.',
+          },
+          {
+            name: '.gitignore .env rule',
+            status: envIgnored ? 'pass' : 'warn',
+            msg: envIgnored ? '.env is ignored in .gitignore.' : 'Add .env to .gitignore to prevent accidental commits.',
+          },
+          {
+            name: '.env.example template',
+            status: envExampleTxt !== null ? 'pass' : (codeKeySet.size > 0 ? 'warn' : 'pass'),
+            msg: envExampleTxt !== null ? `Found ${exampleKeys.size} documented variable(s).` : (codeKeySet.size > 0 ? 'Env variables used in code, but no .env.example found.' : 'No .env.example needed (no env vars detected in root files).'),
+          },
+          {
+            name: 'Hardcoded secret scan',
+            status: secretFindings.length > 0 ? 'fail' : 'pass',
+            msg: secretFindings.length > 0 ? secretFindings.join(', ') : `Scanned ${codeCandidates.length} root source file(s); no hardcoded token patterns found.`,
+          },
+        ];
+
+        document.getElementById('envChecks').innerHTML = envChecks.map(c => {
           const icon = c.status === 'pass' ? '✔' : c.status === 'warn' ? '▲' : '✖';
           return `
             <div class="check-item">
               <span class="badge-status ${c.status}">${icon}</span>
               <div>
-                <div><strong>${c.name}</strong> <span style="color:var(--muted)">(${c.pts}/${c.max})</span></div>
-                <div class="check-msg">${c.msg}</div>
+                <div><strong>${escapeHtml(c.name)}</strong></div>
+                <div class="check-msg">${escapeHtml(c.msg)}</div>
               </div>
             </div>`;
         }).join('');
 
-        // Badge
-        const badgeColor = score >= 85 ? 'brightgreen' : score >= 70 ? 'blue' : 'orange';
-        document.getElementById('badgeCode').textContent =
-          `![Repo Pulse](https://img.shields.io/badge/repo--pulse-${score}%2F100%20(${grade})-${badgeColor})`;
+        document.getElementById('envExampleKeys').innerHTML = exampleKeys.size
+          ? [...exampleKeys].map(k => `<span class="env-tag ok">${escapeHtml(k)}</span>`).join('')
+          : '<span class="check-msg">No .env.example keys found.</span>';
+
+        document.getElementById('envCodeKeys').innerHTML = codeKeySet.size
+          ? [...codeKeySet].map(k => {
+              const isMissing = !exampleKeys.has(k);
+              return `<span class="env-tag ${isMissing ? 'missing' : 'ok'}">${escapeHtml(k)}${isMissing ? ' (missing)' : ''}</span>`;
+            }).join('')
+          : '<span class="check-msg">No env references found in root source files.</span>';
 
         results.style.display = 'block';
         const newUrl = `${window.location.pathname}?repo=${encodeURIComponent(slug)}`;
         window.history.replaceState({}, '', newUrl);
       } catch (err) {
-        errorBanner.textContent = err.message || 'Failed to audit repository.';
+        errorBanner.textContent = err.message || 'Failed to inspect repository.';
         errorBanner.style.display = 'block';
       } finally {
         btn.disabled = false;
-        btn.textContent = 'Audit Repo';
+        btn.textContent = 'Inspect Repo';
       }
     }
 
