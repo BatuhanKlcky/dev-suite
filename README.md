@@ -1,70 +1,78 @@
-# dev-suite (`repo-pulse`)
+# dev-suite
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)
 ![Node.js >= 20](https://img.shields.io/badge/node-%3E%3D20-blue.svg)
 ![Zero Dependencies](https://img.shields.io/badge/dependencies-0-success.svg)
 
-**All-in-one GitHub repository toolkit: Repo Pulse (open-source score), Dev Recap (commit insights), and Env Guard (`.env` & secret hygiene).**
+**All-in-one open-source repository toolkit: Repo Pulse (open-source readiness), Dev Recap (Git commit insights), and Env Guard (`.env` & secret hygiene).**
 
-🌐 **Try all 3 tools in your browser:** [batuhanklcky.github.io/dev-suite](https://batuhanklcky.github.io/dev-suite/)
+🌐 **Try all 3 tools in your browser (zero install):** [batuhanklcky.github.io/dev-suite](https://batuhanklcky.github.io/dev-suite/)
 
 ![dev-suite web demo](assets/web-demo.gif)
 
-`repo-pulse` scans any local repository for documentation quality, community governance files, CI/CD setup, and hygiene/security pitfalls — giving you an instant actionable checklist and a `--fix` flag to scaffold what's missing.
+## What's Inside `dev-suite`?
 
-![repo-pulse terminal demo](assets/demo.gif)
+| Tool | Purpose | CLI / Access |
+| :--- | :--- | :--- |
+| **🩺 Repo Pulse** | 0–100 open-source readiness score, `S–D` grade & `--fix` auto-scaffolding | `npx repo-pulse-cli` · [Web](https://batuhanklcky.github.io/dev-suite/) |
+| **📊 Dev Recap** | Git history stats, weekday charts, file hotspots & `CHANGELOG.md` generator | `npx dev-recap` · [Repo](https://github.com/BatuhanKlcky/dev-recap) |
+| **🛡️ Env Guard** | `.env` leak detection, `.gitignore` rules, `.env.example` diff & secret scan | [Web Suite (Tab 3)](https://batuhanklcky.github.io/dev-suite/) |
 
-## Features
+---
 
-- **Zero runtime dependencies** — instant startup with `npx`
-- **0–100 Health Score & Grade (`S` / `A` / `B` / `C` / `D`)** across 4 categories:
-  - **Documentation (35 pts):** `README.md` depth, key sections, badges/visuals, valid relative links, `CHANGELOG.md`
-  - **Community & Governance (25 pts):** OSI `LICENSE`, `CONTRIBUTING.md`, Issue & PR templates
-  - **Engineering & CI (25 pts):** `.gitignore`, GitHub Actions CI workflow, automated test suite
-  - **Hygiene & Metadata (15 pts):** `.env` leak protection, large file scan (>5 MB), package metadata
-- **Smart `--fix` scaffolding** — auto-generates `LICENSE` (MIT), `CONTRIBUTING.md`, GitHub Issue/PR templates, `.gitignore`, and stack-aware CI workflows (Node, Python, Go, Rust) without ever overwriting existing files
-- **CI-ready** — `--json` output and `--min-score <n>` gate
+## 1. 🩺 Repo Pulse (`repo-pulse-cli`)
 
-## Quick Start
+Audits any local or remote GitHub repository across 4 categories (**Documentation**, **Community & Governance**, **Engineering & CI**, **Hygiene & Metadata**) and scaffolds missing essentials with `--fix`.
 
 ```bash
+# Audit current directory
 npx repo-pulse-cli
-```
 
-Audit any public GitHub repository remotely without cloning:
+# Audit any public GitHub repository without cloning
+npx repo-pulse-cli BatuhanKlcky/dev-suite
 
-```bash
-npx repo-pulse-cli BatuhanKlcky/repo-pulse
-```
-
-Or scan a local directory and auto-fix missing essentials:
-
-```bash
+# Auto-generate missing LICENSE, CONTRIBUTING.md, Issue/PR templates, .gitignore & CI
 npx repo-pulse-cli ./my-project --fix
 ```
 
-## Example Output
+![repo-pulse terminal demo](assets/demo.gif)
 
-```text
-  repo-pulse — Open-Source Readiness Audit
-  Target: /path/to/repo-pulse
+---
 
-  Health Score: ████████████████████████████ 100/100  Grade [ S ]
+## 2. 📊 Dev Recap (`dev-recap`)
 
-  Documentation            ████████████ 35/35
-    ✔ README.md present                (10/10) Found README.md (92 lines).
-    ✔ README key sections              (10/10) Covers installation, usage/examples, and license.
-    ✔ Badges & visual polish           (5/5) Includes badges/visuals and formatted code examples.
-    ✔ Valid relative README links      (5/5) All relative links in README resolve cleanly.
-    ✔ CHANGELOG.md present             (5/5) Found CHANGELOG.md.
+Analyzes Git history with zero runtime dependencies and renders colorful terminal ASCII charts for weekday activity, Conventional Commit types, top contributors, and file hotspots.
+
+```bash
+# Analyze current git repository
+npx dev-recap
+
+# Analyze any public GitHub repository remotely
+npx dev-recap BatuhanKlcky/dev-recap
+
+# Filter by last 30 days & generate CHANGELOG.md
+npx dev-recap --days 30 --changelog CHANGELOG.md
 ```
 
-## CLI Options
+---
+
+## 3. 🛡️ Env Guard (Web Suite)
+
+Available directly in the **Env Guard** tab on [batuhanklcky.github.io/dev-suite](https://batuhanklcky.github.io/dev-suite/):
+
+- Checks whether `.env` is accidentally committed to the repository root
+- Verifies `.env` rules inside `.gitignore`
+- Parses `.env.example` / `.env.template` and compares documented keys against `process.env`, `os.getenv`, and `import.meta.env` usage in source files
+- Scans for common hardcoded token/secret patterns
+
+---
+
+## CLI Options (`repo-pulse-cli`)
 
 | Option | Description |
 | :--- | :--- |
 | `[target]` | Local directory path, `owner/repo`, or GitHub URL (defaults to current working directory) |
-| `--fix` | Auto-generate missing open-source essentials |
+| `--fix` | Auto-generate missing open-source essentials (local repos only) |
 | `--dry-run` | Preview what `--fix` would create without writing to disk |
 | `--json` | Output machine-readable JSON report |
 | `--min-score <n>` | Exit with code `1` if score is below `<n>` |
@@ -74,7 +82,7 @@ npx repo-pulse-cli ./my-project --fix
 
 ## GitHub Actions Usage
 
-Use `repo-pulse` directly from the GitHub Marketplace as a quality gate in your CI pipeline:
+Use **Repo Pulse** directly from the GitHub Marketplace as a CI quality gate:
 
 ```yaml
 - uses: actions/checkout@v4
@@ -83,11 +91,15 @@ Use `repo-pulse` directly from the GitHub Marketplace as a quality gate in your 
     min-score: '80'
 ```
 
-Or via `npx`:
+Or use **Dev Recap** in your workflow:
 
 ```yaml
-- name: Audit repo readiness
-  run: npx repo-pulse-cli --min-score 80
+- uses: actions/checkout@v4
+  with:
+    fetch-depth: 0
+- uses: BatuhanKlcky/dev-recap@v1
+  with:
+    days: '30'
 ```
 
 ## Contributing
