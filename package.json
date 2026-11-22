@@ -31,11 +31,11 @@
   "author": "Batuhan Kılıçkaya",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BatuhanKlcky/repo-pulse.git"
+    "url": "git+https://github.com/BatuhanKlcky/dev-suite.git"
   },
-  "homepage": "https://github.com/BatuhanKlcky/repo-pulse#readme",
+  "homepage": "https://batuhanklcky.github.io/dev-suite/",
   "bugs": {
-    "url": "https://github.com/BatuhanKlcky/repo-pulse/issues"
+    "url": "https://github.com/BatuhanKlcky/dev-suite/issues"
   },
   "engines": {
     "node": ">=20.0.0"

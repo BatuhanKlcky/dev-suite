@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Repo Pulse Suite — Repo Pulse · Dev Recap · Env Guard</title>
+  <title>dev-suite — Repo Pulse · Dev Recap · Env Guard</title>
   <meta name="description" content="Audit any public GitHub repository: Open-Source Readiness (Repo Pulse), Git Activity (Dev Recap), and .env & Secret Safety (Env Guard)." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -218,10 +218,10 @@
     <nav>
       <a class="brand" href="#">
         <span class="brand-dot"></span>
-        <span>repo-pulse suite</span>
+        <span>dev-suite</span>
       </a>
       <div class="nav-links">
-        <a class="btn-ghost" href="https://github.com/BatuhanKlcky/repo-pulse" target="_blank" rel="noreferrer">⭐ repo-pulse</a>
+        <a class="btn-ghost" href="https://github.com/BatuhanKlcky/dev-suite" target="_blank" rel="noreferrer">⭐ Star on GitHub</a>
         <a class="btn-ghost" href="https://github.com/BatuhanKlcky/dev-recap" target="_blank" rel="noreferrer">📊 dev-recap</a>
         <a class="btn-ghost" href="https://www.npmjs.com/package/repo-pulse-cli" target="_blank" rel="noreferrer">npm</a>
       </div>
@@ -231,12 +231,12 @@
       <h1>All-in-One GitHub Repo Inspector</h1>
       <p>Audit open-source readiness (<strong>Repo Pulse</strong>), inspect Git commit pulse (<strong>Dev Recap</strong>), and check <code>.env</code> &amp; secret hygiene (<strong>Env Guard</strong>) — right in your browser.</p>
       <form class="search-box" id="auditForm">
-        <input id="repoInput" type="text" placeholder="owner/repo or https://github.com/owner/repo" value="BatuhanKlcky/repo-pulse" required />
+        <input id="repoInput" type="text" placeholder="owner/repo or https://github.com/owner/repo" value="BatuhanKlcky/dev-suite" required />
         <button id="auditBtn" type="submit">Inspect Repo</button>
       </form>
       <div class="examples">
         <span>Try:</span>
-        <span class="pill" data-repo="BatuhanKlcky/repo-pulse">BatuhanKlcky/repo-pulse</span>
+        <span class="pill" data-repo="BatuhanKlcky/dev-suite">BatuhanKlcky/dev-suite</span>
         <span class="pill" data-repo="BatuhanKlcky/dev-recap">BatuhanKlcky/dev-recap</span>
         <span class="pill" data-repo="BatuhanKlcky/rifki-voice-assistant">BatuhanKlcky/rifki-voice-assistant</span>
         <span class="pill" data-repo="vercel/next.js">vercel/next.js</span>
@@ -352,7 +352,7 @@
 
     <footer>
       Built by <a href="https://github.com/BatuhanKlcky" target="_blank" rel="noreferrer">Batuhan Kılıçkaya</a> ·
-      <a href="https://github.com/BatuhanKlcky/repo-pulse" target="_blank" rel="noreferrer">repo-pulse</a> ·
+      <a href="https://github.com/BatuhanKlcky/dev-suite" target="_blank" rel="noreferrer">dev-suite</a> ·
       <a href="https://github.com/BatuhanKlcky/dev-recap" target="_blank" rel="noreferrer">dev-recap</a>
     </footer>
   </div>
@@ -742,7 +742,7 @@
     });
 
     const params = new URLSearchParams(window.location.search);
-    const initialRepo = params.get('repo') || 'BatuhanKlcky/repo-pulse';
+    const initialRepo = params.get('repo') || 'BatuhanKlcky/dev-suite';
     input.value = initialRepo;
     runAudit(initialRepo);
   </script>

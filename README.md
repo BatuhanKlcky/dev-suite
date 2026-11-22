@@ -1,12 +1,12 @@
-# repo-pulse
+# dev-suite (`repo-pulse`)
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)
 ![Node.js >= 20](https://img.shields.io/badge/node-%3E%3D20-blue.svg)
 ![Zero Dependencies](https://img.shields.io/badge/dependencies-0-success.svg)
 
-**Audit your repository's open-source readiness with a 0–100 health score and auto-fix missing essentials in one command.**
+**All-in-one GitHub repository toolkit: Repo Pulse (open-source score), Dev Recap (commit insights), and Env Guard (`.env` & secret hygiene).**
 
-🌐 **Try it in your browser:** [batuhanklcky.github.io/repo-pulse](https://batuhanklcky.github.io/repo-pulse/)
+🌐 **Try all 3 tools in your browser:** [batuhanklcky.github.io/dev-suite](https://batuhanklcky.github.io/dev-suite/)
 
 `repo-pulse` scans any local repository for documentation quality, community governance files, CI/CD setup, and hygiene/security pitfalls — giving you an instant actionable checklist and a `--fix` flag to scaffold what's missing.
 
@@ -76,7 +76,7 @@ Use `repo-pulse` directly from the GitHub Marketplace as a quality gate in your 
 
 ```yaml
 - uses: actions/checkout@v4
-- uses: BatuhanKlcky/repo-pulse@v1
+- uses: BatuhanKlcky/dev-suite@v1
   with:
     min-score: '80'
 ```
