@@ -1,0 +1,47 @@
+{
+  "name": "repo-pulse",
+  "version": "1.0.0",
+  "description": "Audit your repository's open-source readiness with a 0-100 health score and auto-fix missing essentials.",
+  "type": "module",
+  "bin": {
+    "repo-pulse": "./dist/src/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node --test dist/tests/*.test.js",
+    "start": "node dist/src/cli.js",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "github",
+    "open-source",
+    "cli",
+    "audit",
+    "health-check",
+    "readme",
+    "devtools",
+    "repository"
+  ],
+  "license": "MIT",
+  "author": "Batuhan Kılıçkaya",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BatuhanKlcky/repo-pulse.git"
+  },
+  "homepage": "https://github.com/BatuhanKlcky/repo-pulse#readme",
+  "bugs": {
+    "url": "https://github.com/BatuhanKlcky/repo-pulse/issues"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}
