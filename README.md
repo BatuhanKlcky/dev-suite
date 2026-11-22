@@ -8,6 +8,8 @@
 
 `repo-pulse` scans any local repository for documentation quality, community governance files, CI/CD setup, and hygiene/security pitfalls — giving you an instant actionable checklist and a `--fix` flag to scaffold what's missing.
 
+![repo-pulse terminal demo](assets/demo.gif)
+
 ## Features
 
 - **Zero runtime dependencies** — instant startup with `npx`
