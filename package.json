@@ -1,10 +1,10 @@
 {
-  "name": "repo-pulse",
+  "name": "repo-pulse-cli",
   "version": "1.0.0",
   "description": "Audit your repository's open-source readiness with a 0-100 health score and auto-fix missing essentials.",
   "type": "module",
   "bin": {
-    "repo-pulse": "./dist/src/cli.js"
+    "repo-pulse": "dist/src/cli.js"
   },
   "files": [
     "dist",
@@ -31,7 +31,7 @@
   "author": "Batuhan Kılıçkaya",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BatuhanKlcky/repo-pulse.git"
+    "url": "git+https://github.com/BatuhanKlcky/repo-pulse.git"
   },
   "homepage": "https://github.com/BatuhanKlcky/repo-pulse#readme",
   "bugs": {

@@ -22,13 +22,13 @@
 ## Quick Start
 
 ```bash
-npx repo-pulse
+npx repo-pulse-cli
 ```
 
 Or scan a specific directory and auto-fix missing essentials:
 
 ```bash
-npx repo-pulse ./my-project --fix
+npx repo-pulse-cli ./my-project --fix
 ```
 
 ## Example Output
@@ -66,7 +66,7 @@ Add `repo-pulse` as a quality gate in your CI pipeline:
 
 ```yaml
 - name: Audit repo readiness
-  run: npx repo-pulse --min-score 80
+  run: npx repo-pulse-cli --min-score 80
 ```
 
 ## Contributing
