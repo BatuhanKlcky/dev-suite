@@ -1,0 +1,74 @@
+name: 'Repo Pulse'
+description: 'Audit your repository open-source readiness with a 0-100 health score and enforce quality gates in CI.'
+author: 'Batuhan Kılıçkaya'
+
+branding:
+  icon: 'activity'
+  color: 'green'
+
+inputs:
+  path:
+    description: 'Path to the repository directory to audit'
+    required: false
+    default: '.'
+  min-score:
+    description: 'Minimum health score (0-100) required for the check to pass'
+    required: false
+    default: '0'
+
+outputs:
+  score:
+    description: 'Calculated repository health score (0-100)'
+    value: ${{ steps.audit.outputs.score }}
+  grade:
+    description: 'Calculated letter grade (S, A, B, C, D)'
+    value: ${{ steps.audit.outputs.grade }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+
+    - name: Build repo-pulse
+      shell: bash
+      run: |
+        cd "${{ github.action_path }}"
+        npm ci --ignore-scripts
+        npm run build
+
+    - name: Run repo-pulse audit
+      id: audit
+      shell: bash
+      env:
+        TARGET_PATH: ${{ inputs.path }}
+        MIN_SCORE: ${{ inputs.min-score }}
+      run: |
+        node "${{ github.action_path }}/dist/src/cli.js" "$TARGET_PATH" --no-color || true
+        node "${{ github.action_path }}/dist/src/cli.js" "$TARGET_PATH" --json > /tmp/repo-pulse.json
+
+        SCORE=$(node -e "const r=require('/tmp/repo-pulse.json'); console.log(r.score)")
+        GRADE=$(node -e "const r=require('/tmp/repo-pulse.json'); console.log(r.grade)")
+
+        echo "score=$SCORE" >> "$GITHUB_OUTPUT"
+        echo "grade=$GRADE" >> "$GITHUB_OUTPUT"
+
+        node -e '
+          const fs = require("fs");
+          const r = JSON.parse(fs.readFileSync("/tmp/repo-pulse.json", "utf8"));
+          const lines = [
+            `## Repo Pulse Audit: **${r.score}/${r.maxScore}** (Grade **${r.grade}**)`,
+            "",
+            "| Category | Score |",
+            "| :--- | :--- |",
+            ...r.categories.map(c => `| ${c.label} | ${c.score}/${c.maxScore} |`),
+          ];
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
+        '
+
+        if [ "$SCORE" -lt "$MIN_SCORE" ]; then
+          echo "::error::Repo Pulse score ($SCORE) is below min-score ($MIN_SCORE)."
+          exit 1
+        fi

@@ -64,7 +64,16 @@ npx repo-pulse-cli ./my-project --fix
 
 ## GitHub Actions Usage
 
-Add `repo-pulse` as a quality gate in your CI pipeline:
+Use `repo-pulse` directly from the GitHub Marketplace as a quality gate in your CI pipeline:
+
+```yaml
+- uses: actions/checkout@v4
+- uses: BatuhanKlcky/repo-pulse@v1
+  with:
+    min-score: '80'
+```
+
+Or via `npx`:
 
 ```yaml
 - name: Audit repo readiness
