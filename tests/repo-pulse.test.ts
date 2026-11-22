@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { describe, it } from 'node:test';
 import { applyFixes } from '../src/fixer.js';
+import { parseRemoteRepo } from '../src/remote.js';
 import { scanRepository } from '../src/scanner.js';
 
 function makeTempDir(prefix = 'repo-pulse-test-'): string {
@@ -113,5 +114,32 @@ describe('repo-pulse scanner & fixer', () => {
     } finally {
       fs.rmSync(dir, { recursive: true, force: true });
     }
+  });
+
+  it('parses owner/repo and GitHub URLs while rejecting local paths and --fix on remote', () => {
+    assert.deepEqual(parseRemoteRepo('BatuhanKlcky/repo-pulse'), {
+      slug: 'BatuhanKlcky/repo-pulse',
+      cloneUrl: 'https://github.com/BatuhanKlcky/repo-pulse.git',
+      repoName: 'repo-pulse',
+    });
+    assert.deepEqual(
+      parseRemoteRepo('https://github.com/BatuhanKlcky/repo-pulse/'),
+      {
+        slug: 'BatuhanKlcky/repo-pulse',
+        cloneUrl: 'https://github.com/BatuhanKlcky/repo-pulse.git',
+        repoName: 'repo-pulse',
+      },
+    );
+    assert.equal(parseRemoteRepo('./src/checks'), null);
+    assert.equal(parseRemoteRepo('src'), null);
+
+    const cliPath = path.resolve(process.cwd(), 'dist', 'src', 'cli.js');
+    assert.throws(() => {
+      execFileSync(
+        process.execPath,
+        [cliPath, 'BatuhanKlcky/repo-pulse', '--fix'],
+        { encoding: 'utf8', stdio: 'pipe' },
+      );
+    });
   });
 });

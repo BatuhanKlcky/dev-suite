@@ -27,7 +27,13 @@
 npx repo-pulse-cli
 ```
 
-Or scan a specific directory and auto-fix missing essentials:
+Audit any public GitHub repository remotely without cloning:
+
+```bash
+npx repo-pulse-cli BatuhanKlcky/repo-pulse
+```
+
+Or scan a local directory and auto-fix missing essentials:
 
 ```bash
 npx repo-pulse-cli ./my-project --fix
@@ -53,7 +59,7 @@ npx repo-pulse-cli ./my-project --fix
 
 | Option | Description |
 | :--- | :--- |
-| `[path]` | Target directory to audit (defaults to current working directory) |
+| `[target]` | Local directory path, `owner/repo`, or GitHub URL (defaults to current working directory) |
 | `--fix` | Auto-generate missing open-source essentials |
 | `--dry-run` | Preview what `--fix` would create without writing to disk |
 | `--json` | Output machine-readable JSON report |

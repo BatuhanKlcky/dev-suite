@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-11-23
+
+### Added
+- Remote GitHub repository auditing: run `npx repo-pulse-cli owner/repo` or `npx repo-pulse-cli https://github.com/owner/repo` without cloning manually.
+
 ## [1.1.0] - 2026-11-23
 
 ### Added
