@@ -724,10 +724,12 @@
           const icon = c.status === 'pass' ? '✔' : c.status === 'warn' ? '▲' : '✖';
           return `
             <div class="check-item">
-              <span class="badge-status ${c.status}">${icon}</span>
-              <div>
-                <div><strong>${escapeHtml(c.name)}</strong></div>
-                <div class="check-msg">${escapeHtml(c.msg)}</div>
+              <div class="check-left">
+                <span class="badge-status ${c.status}">${icon}</span>
+                <div>
+                  <div><strong>${escapeHtml(c.name)}</strong></div>
+                  <div class="check-msg">${escapeHtml(c.msg)}</div>
+                </div>
               </div>
             </div>`;
         }).join('');
