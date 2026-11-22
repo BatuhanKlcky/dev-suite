@@ -8,6 +8,8 @@
 
 🌐 **Try all 3 tools in your browser:** [batuhanklcky.github.io/dev-suite](https://batuhanklcky.github.io/dev-suite/)
 
+![dev-suite web demo](assets/web-demo.gif)
+
 `repo-pulse` scans any local repository for documentation quality, community governance files, CI/CD setup, and hygiene/security pitfalls — giving you an instant actionable checklist and a `--fix` flag to scaffold what's missing.
 
 ![repo-pulse terminal demo](assets/demo.gif)
