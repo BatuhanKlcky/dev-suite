@@ -169,10 +169,19 @@
 
     .check-list { display: flex; flex-direction: column; gap: 10px; }
     .check-item {
-      display: flex; align-items: flex-start; gap: 10px;
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
       padding: 10px 12px; border-radius: 10px; background: var(--surface-2);
       font-size: 0.86rem;
     }
+    .check-left { display: flex; align-items: flex-start; gap: 10px; }
+    .btn-fix-gh {
+      flex-shrink: 0; align-self: center;
+      padding: 5px 10px; border-radius: 7px;
+      background: rgba(56, 189, 248, 0.14); border: 1px solid rgba(56, 189, 248, 0.35);
+      color: var(--cyan); text-decoration: none; font-size: 0.76rem; font-weight: 700;
+      white-space: nowrap; transition: background 0.2s;
+    }
+    .btn-fix-gh:hover { background: rgba(56, 189, 248, 0.25); }
     .badge-status { font-weight: 700; font-family: 'JetBrains Mono', monospace; flex-shrink: 0; }
     .pass { color: var(--green); }
     .warn { color: var(--yellow); }
@@ -475,7 +484,26 @@
 
         // === 1. REPO PULSE ===
         const checks = [];
-        const addCheck = (cat, name, status, pts, max, msg) => checks.push({ cat, name, status, pts, max, msg });
+        const lang = (repo.language || '').toLowerCase();
+        const ownerName = repo.owner?.login || slug.split('/')[0];
+        const year = new Date().getFullYear();
+
+        const ghNewUrl = (filename, content) =>
+          `https://github.com/${slug}/new/${encodeURIComponent(branch)}?filename=${encodeURIComponent(filename)}&value=${encodeURIComponent(content)}`;
+
+        const templates = {
+          license: () => ghNewUrl('LICENSE', `MIT License\n\nCopyright (c) ${year} ${ownerName}\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n`),
+          contributing: () => ghNewUrl('CONTRIBUTING.md', `# Contributing to ${repo.name}\n\nThank you for your interest in contributing!\n\n## Getting Started\n1. Fork the repository and create a feature branch.\n2. Make your changes and verify tests pass.\n3. Open a Pull Request describing your changes.\n`),
+          issue: () => ghNewUrl('.github/ISSUE_TEMPLATE/bug_report.md', `---\nname: Bug report\nabout: Create a report to help us improve\ntitle: '[BUG] '\nlabels: bug\n---\n\n## Describe the bug\nA clear description of what the bug is.\n\n## Steps to Reproduce\n1. ...\n2. ...\n`),
+          pr: () => ghNewUrl('.github/PULL_REQUEST_TEMPLATE.md', `## Summary\nBriefly describe what this PR changes and why.\n\n## Checklist\n- [ ] Tests added or updated\n- [ ] Documentation updated\n`),
+          gitignore: () => ghNewUrl('.gitignore', lang.includes('python') ? `.env\n__pycache__/\n*.py[cod]\n.venv/\n` : `.env\nnode_modules/\ndist/\n.DS_Store\n`),
+          ci: () => ghNewUrl('.github/workflows/ci.yml', lang.includes('python')
+            ? `name: CI\non: [push, pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-python@v5\n        with:\n          python-version: '3.12'\n      - run: pytest\n`
+            : `name: CI\non: [push, pull_request]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: '22'\n      - run: npm ci && npm test\n`),
+        };
+
+        const addCheck = (cat, name, status, pts, max, msg, fixUrl = null) =>
+          checks.push({ cat, name, status, pts, max, msg, fixUrl });
 
         if (readmeText.length >= 200) addCheck('Documentation', 'README.md present', 'pass', 15, 15, `Found README (${readmeText.length} chars).`);
         else if (readmeText.length > 0) addCheck('Documentation', 'README.md present', 'warn', 8, 15, 'README is very short.');
@@ -488,22 +516,22 @@
         addCheck('Documentation', 'CHANGELOG.md', hasChangelog ? 'pass' : 'warn', hasChangelog ? 5 : 0, 5, hasChangelog ? 'CHANGELOG.md present.' : 'No CHANGELOG.md found.');
 
         const hasLicense = Boolean(repo.license && repo.license.key !== 'other') || rootNames.has('license') || rootNames.has('license.md');
-        addCheck('Community', 'Open-source LICENSE', hasLicense ? 'pass' : 'fail', hasLicense ? 10 : 0, 10, hasLicense ? `License: ${repo.license?.spdx_id || 'Present'}` : 'No LICENSE file found.');
+        addCheck('Community', 'Open-source LICENSE', hasLicense ? 'pass' : 'fail', hasLicense ? 10 : 0, 10, hasLicense ? `License: ${repo.license?.spdx_id || 'Present'}` : 'No LICENSE file found.', hasLicense ? null : templates.license());
 
         const hasContrib = rootNames.has('contributing.md') || githubFiles.includes('contributing.md');
-        addCheck('Community', 'CONTRIBUTING.md', hasContrib ? 'pass' : 'fail', hasContrib ? 5 : 0, 5, hasContrib ? 'Contributing guide present.' : 'Missing CONTRIBUTING.md.');
+        addCheck('Community', 'CONTRIBUTING.md', hasContrib ? 'pass' : 'fail', hasContrib ? 5 : 0, 5, hasContrib ? 'Contributing guide present.' : 'Missing CONTRIBUTING.md.', hasContrib ? null : templates.contributing());
 
         const hasIssueTpl = githubFiles.includes('issue_template') || githubFiles.includes('issue_template.md');
-        addCheck('Community', 'Issue templates', hasIssueTpl ? 'pass' : 'fail', hasIssueTpl ? 5 : 0, 5, hasIssueTpl ? 'Issue templates configured.' : 'Missing .github/ISSUE_TEMPLATE.');
+        addCheck('Community', 'Issue templates', hasIssueTpl ? 'pass' : 'fail', hasIssueTpl ? 5 : 0, 5, hasIssueTpl ? 'Issue templates configured.' : 'Missing .github/ISSUE_TEMPLATE.', hasIssueTpl ? null : templates.issue());
 
         const hasPrTpl = githubFiles.includes('pull_request_template.md') || githubFiles.includes('pull_request_template');
-        addCheck('Community', 'Pull Request template', hasPrTpl ? 'pass' : 'fail', hasPrTpl ? 5 : 0, 5, hasPrTpl ? 'PR template configured.' : 'Missing PULL_REQUEST_TEMPLATE.md.');
+        addCheck('Community', 'Pull Request template', hasPrTpl ? 'pass' : 'fail', hasPrTpl ? 5 : 0, 5, hasPrTpl ? 'PR template configured.' : 'Missing PULL_REQUEST_TEMPLATE.md.', hasPrTpl ? null : templates.pr());
 
         const hasGitignore = rootNames.has('.gitignore');
-        addCheck('Engineering', '.gitignore configured', hasGitignore ? 'pass' : 'fail', hasGitignore ? 5 : 0, 5, hasGitignore ? '.gitignore present.' : 'Missing .gitignore.');
+        addCheck('Engineering', '.gitignore configured', hasGitignore ? 'pass' : 'fail', hasGitignore ? 5 : 0, 5, hasGitignore ? '.gitignore present.' : 'Missing .gitignore.', hasGitignore ? null : templates.gitignore());
 
         const hasWorkflows = githubFiles.includes('workflows');
-        addCheck('Engineering', 'GitHub Actions CI', hasWorkflows ? 'pass' : 'fail', hasWorkflows ? 10 : 0, 10, hasWorkflows ? 'Workflows directory configured.' : 'No .github/workflows found.');
+        addCheck('Engineering', 'GitHub Actions CI', hasWorkflows ? 'pass' : 'fail', hasWorkflows ? 10 : 0, 10, hasWorkflows ? 'Workflows directory configured.' : 'No .github/workflows found.', hasWorkflows ? null : templates.ci());
 
         const hasTests = rootNames.has('test') || rootNames.has('tests') || rootNames.has('__tests__') || rootNames.has('spec');
         addCheck('Engineering', 'Tests directory', hasTests ? 'pass' : 'warn', hasTests ? 10 : 0, 10, hasTests ? 'Tests directory detected.' : 'No top-level tests/ directory detected.');
@@ -541,13 +569,19 @@
 
         document.getElementById('checkList').innerHTML = checks.map(c => {
           const icon = c.status === 'pass' ? '✔' : c.status === 'warn' ? '▲' : '✖';
+          const fixBtn = c.fixUrl
+            ? `<a class="btn-fix-gh" href="${c.fixUrl}" target="_blank" rel="noreferrer">⚡ Fix on GitHub →</a>`
+            : '';
           return `
             <div class="check-item">
-              <span class="badge-status ${c.status}">${icon}</span>
-              <div>
-                <div><strong>${escapeHtml(c.name)}</strong> <span style="color:var(--muted)">(${c.pts}/${c.max})</span></div>
-                <div class="check-msg">${escapeHtml(c.msg)}</div>
+              <div class="check-left">
+                <span class="badge-status ${c.status}">${icon}</span>
+                <div>
+                  <div><strong>${escapeHtml(c.name)}</strong> <span style="color:var(--muted)">(${c.pts}/${c.max})</span></div>
+                  <div class="check-msg">${escapeHtml(c.msg)}</div>
+                </div>
               </div>
+              ${fixBtn}
             </div>`;
         }).join('');
 
